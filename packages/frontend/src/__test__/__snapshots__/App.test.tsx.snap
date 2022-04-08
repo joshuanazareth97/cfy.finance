@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test App component Should match snapshot 1`] = `
+<div>
+  <div
+    class="sc-eCApnc eaZQdw"
+  >
+    <div
+      class="sc-hKFxyN lpoAlx"
+    >
+      <div
+        class="sc-gtsrHT dXGkIp"
+      >
+        <img
+          alt="Harmony logo"
+          src="harmony_logo.svg"
+        />
+        <div
+          class="sc-bdnxRM eWoDGl"
+        >
+          <code
+            aria-details="{}"
+            aria-label="Balance"
+          />
+          <code
+            aria-details="{}"
+            aria-label="Account"
+          />
+        </div>
+      </div>
+      <div
+        class="sc-dlnjwi GUqgz"
+      >
+        <code
+          aria-details="{}"
+          aria-label="InfoContract"
+        />
+      </div>
+    </div>
+    <div
+      class="Toastify"
+    />
+  </div>
+</div>
+`;

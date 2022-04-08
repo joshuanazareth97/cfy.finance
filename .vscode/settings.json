@@ -1,0 +1,6 @@
+{
+  "solidity.packageDefaultDependenciesContractsDirectory": "",
+  "solidity.packageDefaultDependenciesDirectory": "packages/hardhat/node_modules",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "solidity.compileUsingRemoteVersion": "v0.6.12+commit.27d51765"
+}
