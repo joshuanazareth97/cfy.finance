@@ -2,9 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-type Props = {};
-
-const Homepage = (props: Props) => {
+const Homepage = (props: unknown) => {
 	return (
 		<Box flexGrow={1} display="flex" alignItems="center">
 			<Box

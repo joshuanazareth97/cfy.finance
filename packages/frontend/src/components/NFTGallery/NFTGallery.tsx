@@ -47,7 +47,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 
 	const loadContract = useCallback(async () => {
 		setLoading(true);
-		const contract = zilPay.contracts.at(address);
+		// const contract = zilPay.contracts.at(address);
 		const state = await contract.getState();
 		setContractState(state);
 		setLoading(false);

@@ -19,6 +19,7 @@
     "@web3-react/types": "^6.0.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-modal": "^3.14.3",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
