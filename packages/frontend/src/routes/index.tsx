@@ -1,4 +1,3 @@
-import AppLayout from 'layouts/AppLayout/AppLayout';
 import Homepage from 'pages/Homepage/Homepage';
 import NFTListPage from 'pages/NFTListPage/NFTListPage';
 import RedeemListPage from 'pages/RedeemListPage/RedeemListPage';

@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@mui/material/styles';
 import { useWeb3React } from '@web3-react/core';
+import DefaultLayout from 'layouts/DefaultLayout/DefaultLayout';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
