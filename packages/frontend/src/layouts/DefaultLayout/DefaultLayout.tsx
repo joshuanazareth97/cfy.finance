@@ -1,32 +1,68 @@
 import {
 	AppBar,
+	Box,
 	Button,
 	Container,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	IconButton,
+	Menu,
+	MenuItem,
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import { useWeb3React } from '@web3-react/core';
 import logoImg from 'assets/images/logo.png';
 import { useHarmony } from 'context/harmonyContext';
+import { createHmac } from 'crypto';
 import React, { useCallback, useEffect, useState } from 'react';
+import { MdAccountBalanceWallet, MdAccountBox } from 'react-icons/md';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { truncateString } from 'utils';
+import { ConnectorNames, connectorsByName } from 'utils/connectors';
 
 type Props = {
 	children?: React.ReactNode;
 };
 
 const DefaultLayout = ({ children }: Props) => {
-	const [infoOpen, setInfoOpen] = useState(false);
 	const { hmy } = useHarmony();
+	const { account, deactivate, activate } = useWeb3React();
+
+	const [infoOpen, setInfoOpen] = useState(false);
+	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+	const handleMenu = useCallback(
+		(event: React.MouseEvent<HTMLElement>) => {
+			if (account) {
+				setAnchorEl(event.currentTarget);
+			} else {
+				activate(connectorsByName[ConnectorNames.Metamask]);
+			}
+		},
+		[account, activate],
+	);
+
+	const logout = useCallback(() => {
+		deactivate();
+	}, [deactivate]);
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 
 	return (
 		<>
-			<AppBar color="primary" position="static">
-				<Toolbar>
+			<AppBar color="transparent" position="static">
+				<Toolbar
+					sx={{
+						display: 'flex',
+						justifyContent: 'space-between',
+					}}
+				>
 					<Typography
 						color="white"
 						fontWeight="bold"
@@ -35,13 +71,60 @@ const DefaultLayout = ({ children }: Props) => {
 						to="/"
 						sx={{
 							display: 'flex',
+							textDecoration: 'none',
+							alignItems: 'center',
+							padding: '0.5rem',
 							'& img': {
-								width: '10rem',
+								display: 'inline-block',
+								marginRight: '1rem',
+								width: '3rem',
 							},
 						}}
 					>
 						<img src={logoImg} />
+						CFY
 					</Typography>
+					<Box display="flex">
+						<Button
+							component={RouterLink}
+							to="/lend"
+							sx={{
+								display: 'flex',
+								textDecoration: 'none',
+								marginRight: '0.5rem',
+							}}
+						>
+							Lend
+						</Button>
+						<Button
+							component={RouterLink}
+							to="/borrow"
+							sx={{
+								display: 'flex',
+								textDecoration: 'none',
+								marginRight: '0.5rem',
+							}}
+						>
+							Borrow
+						</Button>
+						<div>
+							<IconButton onClick={handleMenu}>{account ? <MdAccountBox /> : <MdAccountBalanceWallet />}</IconButton>
+							{account && (
+								<Menu
+									id="menu-appbar"
+									anchorEl={anchorEl}
+									anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+									transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+									keepMounted
+									open={Boolean(anchorEl)}
+									onClose={handleClose}
+								>
+									<MenuItem onClick={handleClose}>{truncateString(account)}</MenuItem>
+									<MenuItem onClick={logout}>Logout</MenuItem>
+								</Menu>
+							)}
+						</div>
+					</Box>
 				</Toolbar>
 			</AppBar>
 			<Container
@@ -55,12 +138,12 @@ const DefaultLayout = ({ children }: Props) => {
 				{children ?? <Outlet />}
 			</Container>
 			<Dialog open={infoOpen}>
-				<DialogTitle>Add the Zilpay wallet extension</DialogTitle>
+				<DialogTitle>Add the Metamask wallet extension</DialogTitle>
 				<DialogContent>
 					<Typography mb="1rem">
 						It seems like you don't have the{' '}
-						<a target=" __blank" href="https://zilpay.io/">
-							Zilpay Wallet extension
+						<a target=" __blank" href="https://metamask.io/">
+							Metamask Wallet extension
 						</a>{' '}
 						installed in your browser.
 					</Typography>

@@ -1,10 +1,13 @@
 import { ThemeProvider } from '@mui/material/styles';
-import { useWeb3React } from '@web3-react/core';
+import { useWeb3React, Web3ReactProvider } from '@web3-react/core';
 import DefaultLayout from 'layouts/DefaultLayout/DefaultLayout';
 import React from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import styled from 'styled-components';
+import { ConnectorNames, connectorsByName } from 'utils/connectors';
+import { getLibraryProvider } from 'utils/provider';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import { routeList } from './routes';
 import { theme } from './theme';
@@ -18,8 +21,6 @@ const App = () => {
 };
 
 const AppContent = () => {
-	const { account } = useWeb3React();
-	console.log(account);
 	return (
 		<BrowserRouter>
 			<Routes>

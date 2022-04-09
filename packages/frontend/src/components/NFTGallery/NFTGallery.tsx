@@ -1,3 +1,4 @@
+import Contracts from 'contracts/contracts.json';
 import {
 	Box,
 	Button,
@@ -5,18 +6,49 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
-	Grid,
+	Drawer,
 	IconButton,
 	LinearProgress,
 	TextField,
 	Typography,
 } from '@mui/material';
+import { useWeb3React } from '@web3-react/core';
 import NFTCard from 'components/NFTCard/NFTCard';
+import { useHarmony } from 'context/harmonyContext';
+import {
+	createLoanContract,
+	createNFTContract,
+	getLoanContractFromConnector,
+	getNFTContractFromConnector,
+} from 'helpers/contractHelper';
 import React, { useCallback, useEffect, useState } from 'react';
-import { MdApproval, MdGeneratingTokens, MdMail, MdRefresh } from 'react-icons/md';
-import { toast } from 'react-toastify';
+import { MdApproval, MdMoney, MdRefresh } from 'react-icons/md';
 import { theme } from 'theme';
-import { approveNFT, depositNFT, getUserNFTs } from 'utils';
+import { getUserNFTsFromContract } from 'utils';
+// import { approveNFT, depositNFT, getUserNFTs } from 'utils';
+
+const createLoanParams = [
+	{
+		internalType: 'uint256',
+		name: 'loanAmount',
+		type: 'uint256',
+	},
+	{
+		internalType: 'uint256',
+		name: 'interestAmount',
+		type: 'uint256',
+	},
+	{
+		internalType: 'uint256',
+		name: 'singlePeriodTime',
+		type: 'uint256',
+	},
+	{
+		internalType: 'uint256',
+		name: 'maximumInterestPeriods',
+		type: 'uint256',
+	},
+];
 
 type Props = {
 	title: string;
@@ -24,9 +56,10 @@ type Props = {
 	address: string;
 };
 
-interface INFT {
+export interface INFT {
 	uri: string;
-	id: string;
+	id: number;
+	approvedAddress: string;
 	approved: boolean;
 }
 
@@ -35,7 +68,10 @@ interface ISelectedNFT extends INFT {
 }
 
 const NFTGallery = ({ title, address, symbol }: Props) => {
-	const [contractState, setContractState] = useState<any>(null);
+	const { account, connector, library } = useWeb3React();
+	const { hmy } = useHarmony();
+
+	const [contract, setContract] = useState<any>(createNFTContract(hmy, address));
 	const [loading, setLoading] = useState(true);
 	const [tokens, setTokens] = useState<INFT[] | null>(null);
 
@@ -46,40 +82,31 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 	const [transacting, setTransacting] = useState(false);
 
 	const loadContract = useCallback(async () => {
+		if (!account || !connector || !library) return;
 		setLoading(true);
-		// const contract = zilPay.contracts.at(address);
-		const state = await contract.getState();
-		setContractState(state);
+		const contractObj = await getNFTContractFromConnector(connector, library, address);
+		const tokens = await getUserNFTsFromContract(contract, account);
+		setContract(contractObj);
+		setTokens(tokens);
 		setLoading(false);
-	}, [zilPay, setContractState, setLoading]);
+	}, [setLoading, account, connector, library]);
 
 	useEffect(() => {
-		if (!zilPay) return;
 		loadContract();
-	}, [zilPay, setContractState, loadContract]);
-
-	useEffect(() => {
-		if (!(contractState && currentUser)) return;
-		const userTokens: INFT[] = getUserNFTs(contractState, currentUser.base16);
-		setTokens(userTokens);
-	}, [contractState, currentUser]);
+	}, [loadContract]);
 
 	const approve = useCallback(async () => {
-		if (!zilPay || !selectedNFT) return;
-		console.log('clciked');
+		if (!selectedNFT || !contract) return;
 		try {
-			const approvePromise = approveNFT(zilPay, selectedNFT.id, selectedNFT.address);
-			const res = await toast.promise(approvePromise, {
-				pending: 'Approving NFT for use...',
-				success: 'Success!',
-				error: 'There was an error',
-			});
+			const res = await contract.methods
+				.approve(Contracts.contracts.LoansNFT.address, selectedNFT.id)
+				.send({ from: account, gasLimit: 100000 });
 		} catch (err) {
 			console.log(err);
 		} finally {
 			loadContract();
 		}
-	}, [zilPay, selectedNFT]);
+	}, [contract, selectedNFT, account]);
 
 	const handleNFTClick = useCallback(
 		(token: INFT) => {
@@ -88,32 +115,23 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 				setLinkWindowOpen(true);
 			}
 		},
-		[currentUser, contractState, approve],
+		[account, contract, approve],
 	);
+
+	const createLoanRequest = useCallback(async () => {
+		if (!selectedNFT || !connector || !library) return;
+		const loanContract = await getLoanContractFromConnector(connector, library);
+		console.log({ ...selectedNFT, amount: 1000, interest: 10, singlePeriod: 12, maxPeriods: 10 });
+		const tx = await loanContract.methods
+			.createLoanRequest(selectedNFT.address, selectedNFT.id, 1000, 10, 12, 10)
+			.send({ from: account, gasLimit: 100000 });
+		console.log(tx);
+	}, [selectedNFT, connector, library]);
 
 	useEffect(() => {
 		if (selectedNFT?.approved) return;
 		approve();
 	}, [selectedNFT]);
-
-	const deposit = useCallback(async () => {
-		if (!zilPay || !selectedNFT || !ftAddress || !ftCount) return;
-		setTransacting(true);
-		try {
-			const depositPromise = depositNFT(zilPay, selectedNFT.id, selectedNFT.address, ftAddress, ftCount);
-			const res = await toast.promise(depositPromise, {
-				pending: 'Depositing your NFT and linking it to the provided tokens...',
-				success: 'Success!',
-				error: 'There was an error',
-			});
-			setLinkWindowOpen(false);
-		} catch (err) {
-			console.log(err);
-		} finally {
-			setTransacting(false);
-			loadContract();
-		}
-	}, [zilPay, selectedNFT, ftAddress, ftCount]);
 
 	return (
 		<>
@@ -150,6 +168,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 							}}
 						>
 							{tokens.map(token => {
+								const approved = token.approved;
 								return (
 									// <Grid item sm={6} md={3} key={token.id}>
 									<NFTCard
@@ -163,9 +182,9 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 										}
 										uri={token.uri}
 										secondaryText={
-											<Box display="flex" alignItems="center">
-												{token.approved ? (
-													<MdMail
+											<Box display="flex" alignItems="center" justifyContent="center">
+												{approved ? (
+													<MdMoney
 														color={theme.palette.secondary.main}
 														size="1.25rem"
 														style={{ marginRight: '0.5rem' }}
@@ -174,7 +193,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 													<MdApproval size="1.25rem" style={{ marginRight: '0.5rem' }} />
 												)}
 												<Typography fontWeight="bold" fontSize="0.75rem">
-													{token.approved ? 'Deposit' : 'Approve'}
+													{approved ? 'Request Funds' : 'Approve'}
 												</Typography>
 											</Box>
 										}
@@ -187,7 +206,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 						<Typography>You have no tokens for this contract!</Typography>
 					))}
 			</Box>
-			<Dialog open={linkWindowOpen}>
+			<Drawer anchor="right" open={linkWindowOpen}>
 				<DialogTitle>Deposit and Link</DialogTitle>
 				<DialogContent>
 					<Typography fontWeight="bold">Non Fungible Token #{selectedNFT?.id}</Typography>
@@ -238,11 +257,11 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 					<Button disabled={transacting} onClick={() => setLinkWindowOpen(false)} variant="outlined" color="primary">
 						Cancel
 					</Button>
-					<Button disabled={transacting} onClick={deposit} variant="contained" color="primary">
-						Deposit
+					<Button disabled={transacting} onClick={createLoanRequest} variant="contained" color="primary">
+						Create
 					</Button>
 				</DialogActions>
-			</Dialog>
+			</Drawer>
 		</>
 	);
 };

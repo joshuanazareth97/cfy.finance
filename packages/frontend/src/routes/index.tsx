@@ -1,6 +1,5 @@
 import Homepage from 'pages/Homepage/Homepage';
 import NFTListPage from 'pages/NFTListPage/NFTListPage';
-import RedeemListPage from 'pages/RedeemListPage/RedeemListPage';
 
 interface IRoute {
 	url: string;
@@ -17,14 +16,14 @@ export const routeList: IRoute[] = [
 	},
 	// PROTECTED ROUTE
 	{
-		url: '/nft',
+		url: '/borrow',
 		Component: NFTListPage,
 		protected: true,
 		// LayoutElement: AppLayout,
 	},
 	{
-		url: '/redeem',
-		Component: RedeemListPage,
+		url: '/lend',
+		Component: Homepage,
 		protected: true,
 	},
 ];
