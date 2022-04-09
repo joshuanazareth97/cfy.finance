@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { Harmony } from '@harmony-js/core';
 import { toBech32 } from '@harmony-js/crypto';
 import { isBech32Address, fromWei, hexToNumber, Units } from '@harmony-js/utils';
@@ -12,6 +12,8 @@ interface HamonyProviderContext {
 	balance: string | undefined;
 	fetchBalance: (account: string) => Promise<void>;
 	resetBalance: () => void;
+	userNFTs: any;
+	setUserNFTs: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const provider = getProvider();
@@ -31,7 +33,22 @@ export const HarmonyProvider = ({ children }: HarmonyProviderProps) => {
 };
 
 const useBalance = () => {
-	const [balance, setBalance] = useState<string>();
+	const [balance, setBalance] = useState<string | undefined>(() => {
+		const rawData = localStorage.getItem('harmony');
+		if (rawData) {
+			const data = JSON.parse(rawData);
+			return data.userNFTs ?? null;
+		}
+	});
+
+	const [userNFTs, setUserNFTs] = useState<any>(() => {
+		const rawData = localStorage.getItem('harmony');
+		if (rawData) {
+			const data = JSON.parse(rawData);
+			return data.userNFTs ?? null;
+		}
+		return null;
+	});
 
 	const fetchBalance = useCallback(
 		async (account: string) => {
@@ -47,7 +64,22 @@ const useBalance = () => {
 		setBalance(undefined);
 	};
 
+	// Rehydrate
+	useEffect(() => {
+		const rawData = localStorage.getItem('zilpay');
+		if (rawData) {
+			const data = JSON.parse(rawData);
+		}
+	}, []);
+
+	// Write to localstorage on state change
+	useEffect(() => {
+		localStorage.setItem('harmony', JSON.stringify({ userNFTs, balance }));
+	}, [userNFTs, balance]);
+
 	return {
+		userNFTs,
+		setUserNFTs,
 		balance,
 		fetchBalance,
 		resetBalance,
