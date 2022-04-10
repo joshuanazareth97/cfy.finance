@@ -14,10 +14,9 @@ import {
 	Typography,
 } from '@mui/material';
 import { useWeb3React } from '@web3-react/core';
-import logoImg from 'assets/images/logo.png';
+import logoImg from 'assets/images/logo512_1.svg';
 import { useHarmony } from 'context/harmonyContext';
-import React, { useCallback, useState } from 'react';
-import { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { MdAccountBalanceWallet, MdOutlineAccountCircle } from 'react-icons/md';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';

@@ -6,7 +6,7 @@ import { createNFTContract } from 'helpers/contractHelper';
 import React, { useEffect, useState } from 'react';
 import { ImClock } from 'react-icons/im';
 import { MdAccountCircle } from 'react-icons/md';
-import { getNFT, truncateString } from 'utils';
+import { getNFT, msToDays, sToDays, truncateString } from 'utils';
 
 interface Props extends ILoanRequest {
 	onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -59,7 +59,7 @@ const LoanCard = (props: Props) => {
 				<Box display="flex" justifyContent="center" alignItems="center" marginBottom="1rem">
 					<ImClock style={{ marginRight: '1rem' }} />
 					<Typography fontWeight="bold" fontSize="0.75rem" color="darkgray">
-						{props.singlePeriodTime} days x {props.maximumInterestPeriods}
+						{sToDays(parseInt(props.singlePeriodTime))} days x {props.maximumInterestPeriods}
 					</Typography>
 				</Box>
 				<Box display="flex" justifyContent="center" alignItems="center">

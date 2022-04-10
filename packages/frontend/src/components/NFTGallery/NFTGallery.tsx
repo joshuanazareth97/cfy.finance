@@ -1,10 +1,8 @@
-import Contracts from 'contracts/contracts.json';
-import heroImg from 'assets/images/hero.png';
+import { Unit } from '@harmony-js/utils';
 import {
 	Box,
 	Button,
 	CardMedia,
-	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
@@ -15,18 +13,15 @@ import {
 	Typography,
 } from '@mui/material';
 import { useWeb3React } from '@web3-react/core';
+import heroImg from 'assets/images/hero.png';
 import NFTCard from 'components/NFTCard/NFTCard';
 import { useHarmony } from 'context/harmonyContext';
-import {
-	createLoanContract,
-	createNFTContract,
-	getLoanContractFromConnector,
-	getNFTContractFromConnector,
-} from 'helpers/contractHelper';
+import Contracts from 'contracts/contracts.json';
+import { createNFTContract, getLoanContractFromConnector, getNFTContractFromConnector } from 'helpers/contractHelper';
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdApproval, MdMoney, MdRefresh } from 'react-icons/md';
 import { theme } from 'theme';
-import { daysToMs, getUserNFTsFromContract } from 'utils';
+import { getUserNFTsFromContract } from 'utils';
 // import { approveNFT, depositNFT, getUserNFTs } from 'utils';
 
 const createLoanParams = [
@@ -133,7 +128,14 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 			setTransacting(true);
 			const loanContract = await getLoanContractFromConnector(connector, library);
 			const tx = await loanContract.methods
-				.createLoanRequest(selectedNFT.address, selectedNFT.id, loanAmount, interest, singlePeriod, maxPeriods)
+				.createLoanRequest(
+					selectedNFT.address,
+					selectedNFT.id,
+					new Unit(loanAmount).asOne().toWei(),
+					new Unit(interest).asOne().toWei(),
+					singlePeriod,
+					maxPeriods,
+				)
 				.send({ from: account });
 			console.log(tx);
 		} catch (err) {

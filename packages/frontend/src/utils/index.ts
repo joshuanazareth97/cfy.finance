@@ -1,6 +1,7 @@
 import { ILoanRequest } from 'components/BorrowerDashboard/BorrowerDashboard';
 import { INFT } from 'components/NFTGallery/NFTGallery';
 import Contracts from 'contracts/contracts.json';
+import { fromWei, Units } from '@harmony-js/utils';
 
 export const getListFromFunction = async (func: any, limit: number) => {
 	const final: any = [];
@@ -75,8 +76,12 @@ export const getAllLoansFromContract = async (contract: any) => {
 	const numTokens = await contract.methods.totalLoanRequests().call();
 	const tokens: ILoanRequest[] = [];
 	for (let id = numTokens - 1; id >= 0; id--) {
-		const res = await contract.methods.allLoanRequests(id).call();
-		tokens.push({ ...res, id: numTokens - id });
+		const res: ILoanRequest = await contract.methods.allLoanRequests(id).call();
+		tokens.push({
+			...res,
+			loanAmount: fromWei(res.loanAmount, Units.one),
+			interestAmount: fromWei(res.interestAmount, Units.one),
+		});
 	}
 	return tokens;
 };

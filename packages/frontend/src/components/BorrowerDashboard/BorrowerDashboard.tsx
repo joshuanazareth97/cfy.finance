@@ -27,7 +27,7 @@ export interface ILoanRequest {
 
 const BorrowerDashboard = (props: unknown) => {
 	const { account, connector, library } = useWeb3React();
-	const { hmy } = useHarmony();
+	const { hmy, fetchBalance } = useHarmony();
 
 	const [contract, setContract] = useState<any>(createLoanContract(hmy));
 	const [rows, setRows] = useState<ILoanRequest[]>([]);
@@ -41,6 +41,7 @@ const BorrowerDashboard = (props: unknown) => {
 		setRows(tokens.filter(token => token.borrower.toLowerCase() === account.toLowerCase()));
 		setContract(contractObj);
 		setLoading(false);
+		await fetchBalance(account);
 	}, [setLoading, account, connector, library]);
 
 	useEffect(() => {
@@ -85,7 +86,6 @@ const BorrowerDashboard = (props: unknown) => {
 			label: 'Due Date',
 			format: props => {
 				const val = parseInt(props.value);
-				console.log(val);
 				return val ? new Date(val * 1000).toDateString() : 'NA';
 			},
 		},
@@ -154,6 +154,7 @@ const BorrowerDashboard = (props: unknown) => {
 					const contractObj = await getLoanContractFromConnector(connector, library);
 					setContract(contractObj);
 				}, [account, connector, library, setContract]);
+
 				useEffect(() => {
 					loadContract();
 				}, [loadContract]);
