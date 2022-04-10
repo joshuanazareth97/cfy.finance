@@ -14,6 +14,8 @@ interface HamonyProviderContext {
 	resetBalance: () => void;
 	userNFTs: any;
 	setUserNFTs: React.Dispatch<React.SetStateAction<any>>;
+	loggedIn: boolean;
+	setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const provider = getProvider();
@@ -37,7 +39,7 @@ const useBalance = () => {
 		const rawData = localStorage.getItem('harmony');
 		if (rawData) {
 			const data = JSON.parse(rawData);
-			return data.userNFTs ?? null;
+			return data.balance ?? null;
 		}
 	});
 
@@ -48,6 +50,15 @@ const useBalance = () => {
 			return data.userNFTs ?? null;
 		}
 		return null;
+	});
+
+	const [loggedIn, setLoggedIn] = useState(() => {
+		const rawData = localStorage.getItem('harmony');
+		if (rawData) {
+			const data = JSON.parse(rawData);
+			return !!data.loggedIn;
+		}
+		return false;
 	});
 
 	const fetchBalance = useCallback(
@@ -74,8 +85,8 @@ const useBalance = () => {
 
 	// Write to localstorage on state change
 	useEffect(() => {
-		localStorage.setItem('harmony', JSON.stringify({ userNFTs, balance }));
-	}, [userNFTs, balance]);
+		localStorage.setItem('harmony', JSON.stringify({ userNFTs, balance, loggedIn }));
+	}, [userNFTs, balance, loggedIn]);
 
 	return {
 		userNFTs,
@@ -83,6 +94,8 @@ const useBalance = () => {
 		balance,
 		fetchBalance,
 		resetBalance,
+		loggedIn,
+		setLoggedIn,
 	};
 };
 

@@ -15,7 +15,7 @@ import { INFT } from 'components/NFTGallery/NFTGallery';
 
 const LoanListPage = () => {
 	const { account, connector, library } = useWeb3React();
-	const { hmy } = useHarmony();
+	const { hmy, balance, fetchBalance } = useHarmony();
 
 	const [contract, setContract] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
@@ -24,7 +24,6 @@ const LoanListPage = () => {
 	const [selectedLoan, setSelectedLoan] = useState<ILoanRequest | null>(null);
 	const [userLoans, setUserLoans] = useState<ILoanRequest[] | null>(null);
 
-	//FORM STATE
 	const [transacting, setTransacting] = useState(false);
 
 	const loadContract = useCallback(async () => {
@@ -40,11 +39,12 @@ const LoanListPage = () => {
 		const [a, b] = splitArray<ILoanRequest>(loans, loan => loan.status === '0');
 		setOpenLoans(a);
 		setUserLoans(b.filter(loan => loan.lender.toLowerCase() === account.toLowerCase()));
+		await fetchBalance(account);
 		setLoading(false);
 	}, [contract, account]);
 
 	const underwrite = useCallback(async () => {
-		if (!contract || !selectedLoan) return;
+		if (!contract || !selectedLoan || !account) return;
 		try {
 			const id = parseInt(selectedLoan.loanID);
 			const amt = parseInt(selectedLoan.loanAmount);
@@ -57,6 +57,7 @@ const LoanListPage = () => {
 			console.error(err);
 		} finally {
 			setSelectedLoan(null);
+			await fetchBalance(account);
 		}
 	}, [selectedLoan, contract]);
 

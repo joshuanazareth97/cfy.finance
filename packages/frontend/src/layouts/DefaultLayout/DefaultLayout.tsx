@@ -17,6 +17,7 @@ import { useWeb3React } from '@web3-react/core';
 import logoImg from 'assets/images/logo.png';
 import { useHarmony } from 'context/harmonyContext';
 import React, { useCallback, useState } from 'react';
+import { useEffect } from 'react';
 import { MdAccountBalanceWallet, MdOutlineAccountCircle } from 'react-icons/md';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -28,7 +29,7 @@ type Props = {
 };
 
 const DefaultLayout = ({ children }: Props) => {
-	const { hmy } = useHarmony();
+	const { hmy, setLoggedIn, loggedIn, balance } = useHarmony();
 	const { account, deactivate, activate } = useWeb3React();
 
 	const [infoOpen, setInfoOpen] = useState(false);
@@ -40,18 +41,26 @@ const DefaultLayout = ({ children }: Props) => {
 				setAnchorEl(event.currentTarget);
 			} else {
 				activate(connectorsByName[ConnectorNames.Metamask]);
+				setLoggedIn(true);
 			}
 		},
-		[account, activate],
+		[account, activate, setLoggedIn],
 	);
 
 	const logout = useCallback(() => {
 		deactivate();
+		setLoggedIn(false);
 	}, [deactivate]);
 
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	useEffect(() => {
+		if (loggedIn) {
+			activate(connectorsByName[ConnectorNames.Metamask]);
+		}
+	}, [loggedIn, activate]);
 
 	return (
 		<>
@@ -83,6 +92,19 @@ const DefaultLayout = ({ children }: Props) => {
 						<img src={logoImg} />
 						CFY
 					</Typography>
+					{account && (
+						<Box display="flex" alignItems="center">
+							<MdAccountBalanceWallet
+								size="1.25rem"
+								style={{
+									marginRight: '0.5rem',
+								}}
+							/>
+							<Typography fontSize="0.875rem" fontWeight="bold">
+								{balance?.slice(0, 7)}
+							</Typography>
+						</Box>
+					)}
 					<Box display="flex">
 						<Button
 							component={RouterLink}
