@@ -85,7 +85,8 @@ const BorrowerDashboard = (props: unknown) => {
 			label: 'Due Date',
 			format: props => {
 				const val = parseInt(props.value);
-				return val ? new Date(val).toDateString() : 'NA';
+				console.log(val);
+				return val ? new Date(val * 1000).toDateString() : 'NA';
 			},
 		},
 		{

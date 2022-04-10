@@ -1,7 +1,9 @@
 import Contracts from 'contracts/contracts.json';
+import heroImg from 'assets/images/hero.png';
 import {
 	Box,
 	Button,
+	CardMedia,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -221,24 +223,77 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 						<Typography>You have no tokens for this contract!</Typography>
 					))}
 			</Box>
-			<Drawer anchor="right" open={linkWindowOpen}>
-				<DialogTitle>Collateralize</DialogTitle>
+			<Drawer
+				PaperProps={{
+					sx: { width: '40%', padding: `0 !important` },
+				}}
+				anchor="right"
+				open={linkWindowOpen}
+			>
+				<DialogTitle
+					sx={{
+						fontSize: '2rem',
+					}}
+				>
+					Collateralize
+				</DialogTitle>
+				<CardMedia
+					sx={{
+						width: 'auto',
+						padding: '0 1rem',
+						borderBottom: '0.5rem solid',
+						borderColor: 'primary.main',
+					}}
+					component="img"
+					src={heroImg}
+				/>
 				<DialogContent>
-					<Typography fontWeight="bold">Non Fungible Token #{selectedNFT?.id}</Typography>
-					<Typography
+					<Box
+						display="flex"
+						flexDirection="column"
+						alignItems="center"
 						sx={{
-							marginBottom: '1rem',
+							'& img': {
+								width: '30%',
+								borderRadius: '50%',
+								marginBottom: '1rem',
+							},
 						}}
 					>
-						{address}
-					</Typography>
+						<img src={selectedNFT?.uri} alt={`${selectedNFT?.symbol} #${selectedNFT?.id}`} />
+						<Typography
+							fontWeight="bold"
+							sx={{
+								marginBottom: '0.5rem',
+							}}
+						>
+							{selectedNFT?.symbol} #{selectedNFT?.id}
+						</Typography>
+						<Typography
+							fontWeight="bold"
+							sx={{
+								marginBottom: '0.5rem',
+							}}
+						>
+							{selectedNFT?.name}
+						</Typography>
+						<Typography
+							fontSize="0.75rem"
+							fontWeight="bold"
+							sx={{
+								marginBottom: '2rem',
+							}}
+						>
+							{address}
+						</Typography>
+					</Box>
 					<Typography
 						sx={{
 							marginBottom: '0.5rem',
 						}}
 						fontWeight="bold"
 					>
-						Terms of Loan
+						Loan Terms
 					</Typography>
 					<Box
 						display="grid"

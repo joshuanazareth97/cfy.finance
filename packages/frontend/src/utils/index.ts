@@ -51,6 +51,8 @@ export const getNFT = async (tokenId: number, nftContract: any) => {
 
 export const getUserNFTsFromContract = async (nftContract: any, userAddress: string) => {
 	const numTokens = decodeSmartContractResult(await nftContract.methods.balanceOf(userAddress).call());
+	const symbol = await nftContract.methods.symbol().call();
+	const name = await nftContract.methods.name().call();
 	const tokens: INFT[] = [];
 	for (let id = 0; id < numTokens; id++) {
 		const res = await nftContract.methods.tokenOfOwnerByIndex(userAddress, id).call();
@@ -62,6 +64,8 @@ export const getUserNFTsFromContract = async (nftContract: any, userAddress: str
 			approvedAddress,
 			approved: approvedAddress.toLowerCase() === Contracts.contracts.LoansNFT.address.toLowerCase(),
 			uri,
+			symbol,
+			name,
 		});
 	}
 	return tokens;
