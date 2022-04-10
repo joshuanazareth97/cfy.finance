@@ -7,7 +7,7 @@ import { createLoanContract, createNFTContract, getLoanContractFromConnector } f
 import React, { useCallback, useState } from 'react';
 import { useEffect } from 'react';
 import { MdCancel, MdRefresh } from 'react-icons/md';
-import { getAllLoansFromContract, getNFT, splitArray, truncateString } from 'utils';
+import { getAllLoansFromContract, getNFT, splitArray, sToDays, truncateString } from 'utils';
 import { fromWei, Units, Unit } from '@harmony-js/utils';
 import EnhancedTable, { Column } from 'components/EnhancedTable/EnhancedTable';
 import StatusChip from 'components/StatusChip/StatusChip';
@@ -103,7 +103,7 @@ const LoanListPage = () => {
 		{
 			accessor: 'singlePeriodTime',
 			label: 'Duration',
-			format: props => `${props.original.maximumInterestPeriods} x ${props.value} days`,
+			format: props => `${props.original.maximumInterestPeriods} x ${sToDays(props.value)} days`,
 		},
 		{
 			accessor: 'endLoanTimeStamp',
@@ -111,7 +111,7 @@ const LoanListPage = () => {
 			label: 'Due Date',
 			format: props => {
 				const val = parseInt(props.value);
-				return val ? new Date(val).toDateString() : 'NA';
+				return val ? new Date(val * 1000).toDateString() : 'NA';
 			},
 		},
 		{
@@ -203,7 +203,7 @@ const LoanListPage = () => {
 				} else if (props.original.status === '1') {
 					return (
 						<Button
-							disabled={props.original.endLoanTimeStamp > Date.now()}
+							disabled={parseInt(props.original.endLoanTimeStamp) * 1000 > Date.now()}
 							onClick={cancel}
 							color="warning"
 							startIcon={<MdCancel />}

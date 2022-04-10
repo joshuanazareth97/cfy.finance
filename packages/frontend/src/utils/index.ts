@@ -85,6 +85,10 @@ export const decodeSmartContractResult = (res: any) => {
 	return res.words?.[0] ?? '';
 };
 
-const MS_PER_DAY = 86400000;
+const S_PER_DAY = 86400;
+export const daysToS = (days: number) => days * S_PER_DAY;
+export const sToDays = (ms: number) => ms / S_PER_DAY;
+
+const MS_PER_DAY = S_PER_DAY * 1000;
 export const daysToMs = (days: number) => days * MS_PER_DAY;
 export const msToDays = (ms: number) => ms / MS_PER_DAY;

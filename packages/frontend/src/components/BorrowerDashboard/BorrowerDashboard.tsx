@@ -8,7 +8,7 @@ import { useHarmony } from 'context/harmonyContext';
 import { createLoanContract, createNFTContract, getLoanContractFromConnector } from 'helpers/contractHelper';
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdAdd, MdArrowRightAlt, MdCancel } from 'react-icons/md';
-import { getAllLoansFromContract, getNFT, truncateString } from 'utils';
+import { getAllLoansFromContract, getNFT, msToDays, sToDays, truncateString } from 'utils';
 // import { approveNFT, depositNFT, getUserNFTs } from 'utils';
 
 export interface ILoanRequest {
@@ -77,7 +77,7 @@ const BorrowerDashboard = (props: unknown) => {
 		{
 			accessor: 'singlePeriodTime',
 			label: 'Duration',
-			format: props => `${props.original.maximumInterestPeriods} x ${props.value} days`,
+			format: props => `${props.original.maximumInterestPeriods} x ${sToDays(props.value)} days`,
 		},
 		{
 			accessor: 'endLoanTimeStamp',
