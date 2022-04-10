@@ -534,7 +534,7 @@
       ]
     },
     "LoansNFT": {
-      "address": "0x180e0Cdd2c6A27b9b1eF18D347e2AD12c14DD11F",
+      "address": "0xD17b2a6148Ca66297A91068Dc1Ef1f6813B5a436",
       "abi": [
         {
           "inputs": [],
@@ -572,6 +572,19 @@
           ],
           "name": "Unpaused",
           "type": "event"
+        },
+        {
+          "inputs": [],
+          "name": "CFY_VAULT",
+          "outputs": [
+            {
+              "internalType": "address payable",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         },
         {
           "inputs": [

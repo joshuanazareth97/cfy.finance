@@ -390,8 +390,8 @@
       ]
     },
     "/home/joshua/development/cfy_client/packages/hardhat/contracts/LoansNFT.sol": {
-      "lastModificationDate": 1649446224924,
-      "contentHash": "b9a52080a2aa68c1a219324410ab3adc",
+      "lastModificationDate": 1649574039595,
+      "contentHash": "b920f724c59140d621c5f6cc42bbabf9",
       "sourceName": "contracts/LoansNFT.sol",
       "solcConfig": {
         "version": "0.6.12",
@@ -427,9 +427,7 @@
         "@openzeppelin/contracts/token/ERC721/IERC721.sol",
         "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
         "@openzeppelin/contracts/utils/Pausable.sol",
-        "@openzeppelin/contracts/math/SafeMath.sol",
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "@openzeppelin/contracts/access/Ownable.sol"
+        "@openzeppelin/contracts/math/SafeMath.sol"
       ],
       "versionPragmas": [
         ">=0.6.0 <0.7.0"

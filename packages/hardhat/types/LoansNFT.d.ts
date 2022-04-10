@@ -22,6 +22,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface LoansNFTInterface extends ethers.utils.Interface {
   functions: {
+    "CFY_VAULT()": FunctionFragment;
     "acceptLoanRequest(uint256)": FunctionFragment;
     "allLoanRequests(uint256)": FunctionFragment;
     "cancelLoanRequest(uint256)": FunctionFragment;
@@ -36,6 +37,7 @@ interface LoansNFTInterface extends ethers.utils.Interface {
     "unPauseLoans()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "CFY_VAULT", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "acceptLoanRequest",
     values: [BigNumberish]
@@ -86,6 +88,7 @@ interface LoansNFTInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "CFY_VAULT", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "acceptLoanRequest",
     data: BytesLike
@@ -181,6 +184,8 @@ export class LoansNFT extends BaseContract {
   interface: LoansNFTInterface;
 
   functions: {
+    CFY_VAULT(overrides?: CallOverrides): Promise<[string]>;
+
     acceptLoanRequest(
       loanID: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -264,6 +269,8 @@ export class LoansNFT extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  CFY_VAULT(overrides?: CallOverrides): Promise<string>;
 
   acceptLoanRequest(
     loanID: BigNumberish,
@@ -349,6 +356,8 @@ export class LoansNFT extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    CFY_VAULT(overrides?: CallOverrides): Promise<string>;
+
     acceptLoanRequest(
       loanID: BigNumberish,
       overrides?: CallOverrides
@@ -438,6 +447,8 @@ export class LoansNFT extends BaseContract {
   };
 
   estimateGas: {
+    CFY_VAULT(overrides?: CallOverrides): Promise<BigNumber>;
+
     acceptLoanRequest(
       loanID: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -497,6 +508,8 @@ export class LoansNFT extends BaseContract {
   };
 
   populateTransaction: {
+    CFY_VAULT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     acceptLoanRequest(
       loanID: BigNumberish,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
