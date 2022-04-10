@@ -1,4 +1,4 @@
-import { Box, CircularProgress, IconButton, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, LinearProgress, Typography } from '@mui/material';
 import { useWeb3React } from '@web3-react/core';
 import { ILoanRequest } from 'components/BorrowerDashboard/BorrowerDashboard';
 import LoanCard from 'components/LoanCard/LoanCard';
@@ -6,7 +6,7 @@ import { useHarmony } from 'context/harmonyContext';
 import { createLoanContract, createNFTContract, getLoanContractFromConnector } from 'helpers/contractHelper';
 import React, { useCallback, useState } from 'react';
 import { useEffect } from 'react';
-import { MdRefresh } from 'react-icons/md';
+import { MdCancel, MdRefresh } from 'react-icons/md';
 import { getAllLoansFromContract, getNFT, splitArray, truncateString } from 'utils';
 import { fromWei, Units, Unit } from '@harmony-js/utils';
 import EnhancedTable, { Column } from 'components/EnhancedTable/EnhancedTable';
@@ -164,6 +164,56 @@ const LoanListPage = () => {
 				);
 			},
 		},
+		{
+			accessor: 'loanID',
+			label: 'Actions',
+			align: 'center',
+			format: props => {
+				const { account, connector, library } = useWeb3React();
+
+				const [contract, setContract] = useState<any>(null);
+				const [loading, setLoading] = useState(false);
+
+				const loadContract = useCallback(async () => {
+					if (!account || !connector || !library) return;
+					const contractObj = await getLoanContractFromConnector(connector, library);
+					setContract(contractObj);
+				}, [account, connector, library, setContract]);
+				useEffect(() => {
+					loadContract();
+				}, [loadContract]);
+
+				const cancel = useCallback(async () => {
+					if (!contract || !account) return;
+					try {
+						setLoading(true);
+						const id = parseInt(props.value);
+						const tx = await contract.methods.endLoanRequest(id).send({ from: account });
+						console.log(tx);
+					} catch (err) {
+						console.log(err);
+					} finally {
+						setLoading(false);
+						props.loadLoans();
+					}
+				}, [contract, account, props.loadContract]);
+
+				if (loading) {
+					return <CircularProgress />;
+				} else if (props.original.status === '1') {
+					return (
+						<Button
+							disabled={props.original.endLoanTimeStamp > Date.now()}
+							onClick={cancel}
+							color="warning"
+							startIcon={<MdCancel />}
+						>
+							Cancel
+						</Button>
+					);
+				}
+			},
+		},
 	];
 
 	return (
@@ -248,7 +298,7 @@ const LoanListPage = () => {
 					Lender Positions
 				</Typography>
 			</Box>
-			<EnhancedTable rows={userLoans ?? []} columns={columns} loading={loading} />
+			<EnhancedTable rows={userLoans ?? []} columns={columns} loading={loading} passToCell={{ loadLoans }} />
 		</>
 	);
 };

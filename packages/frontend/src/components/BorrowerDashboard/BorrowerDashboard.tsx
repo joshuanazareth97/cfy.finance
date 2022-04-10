@@ -1,20 +1,14 @@
-import { Box, Button, Chip, CircularProgress, Typography } from '@mui/material';
-import { fromWei, Units, Unit } from '@harmony-js/utils';
+import { Unit } from '@harmony-js/utils';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { useWeb3React } from '@web3-react/core';
 import EnhancedTable, { Column } from 'components/EnhancedTable/EnhancedTable';
 import { INFT } from 'components/NFTGallery/NFTGallery';
 import StatusChip from 'components/StatusChip/StatusChip';
 import { useHarmony } from 'context/harmonyContext';
-import {
-	createLoanContract,
-	createNFTContract,
-	getLoanContractFromConnector,
-	getNFTContractFromConnector,
-} from 'helpers/contractHelper';
+import { createLoanContract, createNFTContract, getLoanContractFromConnector } from 'helpers/contractHelper';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMemo } from 'react';
-import { MdAdd, MdArrowRight, MdArrowRightAlt, MdDelete, MdPlusOne } from 'react-icons/md';
-import { getAllLoansFromContract, getNFT, getUserNFTsFromContract, truncateString } from 'utils';
+import { MdAdd, MdArrowRightAlt, MdCancel } from 'react-icons/md';
+import { getAllLoansFromContract, getNFT, truncateString } from 'utils';
 // import { approveNFT, depositNFT, getUserNFTs } from 'utils';
 
 export interface ILoanRequest {
@@ -214,7 +208,7 @@ const BorrowerDashboard = (props: unknown) => {
 					return <CircularProgress />;
 				} else if (props.original.status === '0') {
 					return (
-						<Button onClick={cancel} color="warning" startIcon={<MdDelete />}>
+						<Button onClick={cancel} color="warning" startIcon={<MdCancel />}>
 							Cancel
 						</Button>
 					);
