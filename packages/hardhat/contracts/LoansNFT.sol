@@ -92,7 +92,7 @@ contract LoansNFT is IERC721Receiver, Pausable {
         loanRequest.tokenIdNFT = tokenIdNFT;
         loanRequest.loanAmount = loanAmount;
         loanRequest.interestAmount = interestAmount;
-        loanRequest.singlePeriodTime = singlePeriodTime;
+        loanRequest.singlePeriodTime = (singlePeriodTime * 1 days);
         loanRequest.maximumInterestPeriods = maximumInterestPeriods;
         loanRequest.status = Status.PENDING;
         totalLoanRequests = SafeMath.add(totalLoanRequests, 1);

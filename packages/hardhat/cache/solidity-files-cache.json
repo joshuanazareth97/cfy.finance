@@ -390,8 +390,8 @@
       ]
     },
     "/home/joshua/development/cfy_client/packages/hardhat/contracts/LoansNFT.sol": {
-      "lastModificationDate": 1649574039595,
-      "contentHash": "b920f724c59140d621c5f6cc42bbabf9",
+      "lastModificationDate": 1649574538795,
+      "contentHash": "c628827bdbcf2b8d084d9d93ede239ed",
       "sourceName": "contracts/LoansNFT.sol",
       "solcConfig": {
         "version": "0.6.12",
