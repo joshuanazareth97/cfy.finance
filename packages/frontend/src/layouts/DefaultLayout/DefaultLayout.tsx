@@ -16,9 +16,8 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import logoImg from 'assets/images/logo.png';
 import { useHarmony } from 'context/harmonyContext';
-import { createHmac } from 'crypto';
-import React, { useCallback, useEffect, useState } from 'react';
-import { MdAccountBalanceWallet, MdAccountBox } from 'react-icons/md';
+import React, { useCallback, useState } from 'react';
+import { MdAccountBalanceWallet, MdOutlineAccountCircle } from 'react-icons/md';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { truncateString } from 'utils';
@@ -108,7 +107,9 @@ const DefaultLayout = ({ children }: Props) => {
 							Borrow
 						</Button>
 						<div>
-							<IconButton onClick={handleMenu}>{account ? <MdAccountBox /> : <MdAccountBalanceWallet />}</IconButton>
+							<IconButton onClick={handleMenu}>
+								{account ? <MdOutlineAccountCircle /> : <MdAccountBalanceWallet />}
+							</IconButton>
 							{account && (
 								<Menu
 									id="menu-appbar"

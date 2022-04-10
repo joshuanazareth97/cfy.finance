@@ -1,4 +1,5 @@
 import Homepage from 'pages/Homepage/Homepage';
+import LoanListPage from 'pages/LoanListPage/LoanListPage';
 import NFTListPage from 'pages/NFTListPage/NFTListPage';
 
 interface IRoute {
@@ -23,7 +24,7 @@ export const routeList: IRoute[] = [
 	},
 	{
 		url: '/lend',
-		Component: Homepage,
+		Component: LoanListPage,
 		protected: true,
 	},
 ];

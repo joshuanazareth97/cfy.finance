@@ -24,7 +24,7 @@ import {
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdApproval, MdMoney, MdRefresh } from 'react-icons/md';
 import { theme } from 'theme';
-import { getUserNFTsFromContract } from 'utils';
+import { daysToMs, getUserNFTsFromContract } from 'utils';
 // import { approveNFT, depositNFT, getUserNFTs } from 'utils';
 
 const createLoanParams = [
@@ -61,6 +61,8 @@ export interface INFT {
 	id: number;
 	approvedAddress: string;
 	approved: boolean;
+	symbol?: string;
+	name?: string;
 }
 
 interface ISelectedNFT extends INFT {
@@ -77,8 +79,12 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 
 	const [selectedNFT, setSelectedNFT] = useState<ISelectedNFT | null>(null);
 	const [linkWindowOpen, setLinkWindowOpen] = useState(false);
-	const [ftAddress, setFTAddress] = useState('');
-	const [ftCount, setFTCount] = useState<number | ''>('');
+
+	//FORM STATE
+	const [loanAmount, setLoanAmount] = useState<string | null>(null);
+	const [interest, setInterest] = useState<string | null>(null);
+	const [singlePeriod, setSinglePeriod] = useState<number | null>(null);
+	const [maxPeriods, setMaxPeriods] = useState<number | null>(null);
 	const [transacting, setTransacting] = useState(false);
 
 	const loadContract = useCallback(async () => {
@@ -100,7 +106,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 		try {
 			const res = await contract.methods
 				.approve(Contracts.contracts.LoansNFT.address, selectedNFT.id)
-				.send({ from: account, gasLimit: 100000 });
+				.send({ from: account });
 		} catch (err) {
 			console.log(err);
 		} finally {
@@ -119,14 +125,23 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 	);
 
 	const createLoanRequest = useCallback(async () => {
-		if (!selectedNFT || !connector || !library) return;
-		const loanContract = await getLoanContractFromConnector(connector, library);
-		console.log({ ...selectedNFT, amount: 1000, interest: 10, singlePeriod: 12, maxPeriods: 10 });
-		const tx = await loanContract.methods
-			.createLoanRequest(selectedNFT.address, selectedNFT.id, 1000, 10, 12, 10)
-			.send({ from: account, gasLimit: 100000 });
-		console.log(tx);
-	}, [selectedNFT, connector, library]);
+		if (!selectedNFT || !connector || !library || !account || !loanAmount || !interest || !singlePeriod || !maxPeriods)
+			return;
+		try {
+			setTransacting(true);
+			const loanContract = await getLoanContractFromConnector(connector, library);
+			const tx = await loanContract.methods
+				.createLoanRequest(selectedNFT.address, selectedNFT.id, loanAmount, interest, singlePeriod, maxPeriods)
+				.send({ from: account });
+			console.log(tx);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setLinkWindowOpen(false);
+			loadContract();
+			setTransacting(false);
+		}
+	}, [selectedNFT, connector, library, account, loanAmount, interest, maxPeriods, singlePeriod]);
 
 	useEffect(() => {
 		if (selectedNFT?.approved) return;
@@ -207,7 +222,7 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 					))}
 			</Box>
 			<Drawer anchor="right" open={linkWindowOpen}>
-				<DialogTitle>Deposit and Link</DialogTitle>
+				<DialogTitle>Collateralize</DialogTitle>
 				<DialogContent>
 					<Typography fontWeight="bold">Non Fungible Token #{selectedNFT?.id}</Typography>
 					<Typography
@@ -223,35 +238,71 @@ const NFTGallery = ({ title, address, symbol }: Props) => {
 						}}
 						fontWeight="bold"
 					>
-						Fungible (ZRC2) Token
+						Terms of Loan
 					</Typography>
-					<TextField
-						value={ftAddress}
-						onChange={event => setFTAddress(event.target.value)}
+					<Box
+						display="grid"
 						sx={{
-							marginBottom: '0.5rem',
-							'& .MuiInputBase-input': {
-								padding: '0.75rem',
+							gridTemplateColumns: {
+								xs: 'repeat(1, 1fr)',
+								sm: 'repeat(2, 1fr)',
 							},
+							gap: 2,
 						}}
-						variant="outlined"
-						placeholder="Contract Address"
-						fullWidth
-					/>
-					<TextField
-						value={ftCount}
-						onChange={event => setFTCount(parseInt(event.target.value))}
-						sx={{
-							marginBottom: '0.5rem',
-							'& .MuiInputBase-input': {
-								padding: '0.75rem',
-							},
-						}}
-						fullWidth
-						variant="outlined"
-						type="number"
-						placeholder="Number of shares"
-					/>
+					>
+						<TextField
+							value={loanAmount || ''}
+							onChange={event => setLoanAmount(event.target.value)}
+							sx={{
+								marginBottom: '0.5rem',
+								'& .MuiInputBase-input': {
+									padding: '0.75rem',
+								},
+							}}
+							variant="outlined"
+							placeholder="Loan Amount"
+							type="number"
+						/>
+						<TextField
+							value={interest || ''}
+							onChange={event => setInterest(event.target.value)}
+							sx={{
+								marginBottom: '0.5rem',
+								'& .MuiInputBase-input': {
+									padding: '0.75rem',
+								},
+							}}
+							variant="outlined"
+							type="number"
+							placeholder="Interest Amount"
+						/>
+						<TextField
+							value={singlePeriod || ''}
+							onChange={event => setSinglePeriod(parseInt(event.target.value))}
+							sx={{
+								marginBottom: '0.5rem',
+								'& .MuiInputBase-input': {
+									padding: '0.75rem',
+								},
+							}}
+							variant="outlined"
+							type="number"
+							placeholder="Single Interest Period (days)"
+						/>
+						<TextField
+							value={maxPeriods || ''}
+							onChange={event => setMaxPeriods(parseInt(event.target.value))}
+							sx={{
+								marginBottom: '0.5rem',
+								'& .MuiInputBase-input': {
+									padding: '0.75rem',
+								},
+							}}
+							variant="outlined"
+							type="number"
+							placeholder="Maximum Periods"
+						/>
+					</Box>
 				</DialogContent>
 				<DialogActions>
 					<Button disabled={transacting} onClick={() => setLinkWindowOpen(false)} variant="outlined" color="primary">

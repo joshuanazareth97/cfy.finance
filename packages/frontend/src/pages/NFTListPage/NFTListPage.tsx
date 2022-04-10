@@ -147,7 +147,7 @@ const NFTListPage = () => {
 						flexDirection: 'column',
 					}}
 				>
-					Open Requests
+					Borrower Positions
 				</Typography>
 			</Box>
 			<BorrowerDashboard />
