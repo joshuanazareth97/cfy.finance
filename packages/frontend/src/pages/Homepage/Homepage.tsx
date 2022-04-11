@@ -54,7 +54,7 @@ const Homepage = (props: unknown) => {
 				</Typography>
 				<Button
 					component="a"
-					href="https://github.com/FoundationCryptoLabs/CFY/blob/main/README.md"
+					href="https://github.com/FoundationCryptoLabs/CFY/tree/updated1/docs"
 					target="_blank"
 					sx={{
 						marginBottom: '4rem',
@@ -106,7 +106,7 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								Lock up any HRC721 token as collateral for a loan request under the 'Borrow' tab.
 							</ListItemText>
 						</ListItem>
 						<ListItem>
@@ -119,7 +119,7 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								Setup loan request parameters, including loan amount, interest amount, and maximum interest periods
 							</ListItemText>
 						</ListItem>
 						<ListItem>
@@ -132,7 +132,48 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								Any lender can underwrite your loan request after reviewing the terms
+							</ListItemText>
+						</ListItem>
+						<ListItem>
+							<ListItemIcon>
+								<ImCheckmark color={theme.palette.primary.main} />
+							</ListItemIcon>
+							<ListItemText
+								primaryTypographyProps={{
+									fontWeight: 'bold',
+									color: 'gray',
+								}}
+							>
+								After loan is funded, you can extend the loan period upto the maximum interest periods
+							</ListItemText>
+						</ListItem>
+						<ListItem>
+							<ListItemIcon>
+								<ImCheckmark color={theme.palette.primary.main} />
+							</ListItemIcon>
+							<ListItemText
+								primaryTypographyProps={{
+									fontWeight: 'bold',
+									color: 'gray',
+								}}
+							>
+								Upon repayment of the loan with interest within the time specified, the LoansNFT.sol contract releases
+								your NFT back to you
+							</ListItemText>
+						</ListItem>
+						<ListItem>
+							<ListItemIcon>
+								<ImCheckmark color={theme.palette.primary.main} />
+							</ListItemIcon>
+							<ListItemText
+								primaryTypographyProps={{
+									fontWeight: 'bold',
+									color: 'gray',
+								}}
+							>
+								If you fail to repay the loan within the promised time, the NFT collateral is transferred to the
+								creditor
 							</ListItemText>
 						</ListItem>
 					</List>
@@ -182,7 +223,7 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								Go to lending page, to review currently open loan requests.
 							</ListItemText>
 						</ListItem>
 						<ListItem>
@@ -195,7 +236,8 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								Evaluate the terms of each P2P loan. Consider weather you would be willing to accept the collateral NFT
+								offered by the user, in case they default on the loan.
 							</ListItemText>
 						</ListItem>
 						<ListItem>
@@ -208,7 +250,37 @@ const Homepage = (props: unknown) => {
 									color: 'gray',
 								}}
 							>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, eveniet.
+								When you find a request with terms that you like, click on 'underwrite loan'. You will be asked to pay
+								the loan amount, which will be transferred to the borrower. The NFT will be held in escrow until the
+								loan is repaid.
+							</ListItemText>
+						</ListItem>
+						<ListItem>
+							<ListItemIcon>
+								<ImCheckmark color={theme.palette.primary.main} />
+							</ListItemIcon>
+							<ListItemText
+								primaryTypographyProps={{
+									fontWeight: 'bold',
+									color: 'gray',
+								}}
+							>
+								Whenever the borrower repays the loan, the loan + interest amount will be directly transferred to your
+								wallet. No further steps needed on your part!
+							</ListItemText>
+						</ListItem>
+						<ListItem>
+							<ListItemIcon>
+								<ImCheckmark color={theme.palette.primary.main} />
+							</ListItemIcon>
+							<ListItemText
+								primaryTypographyProps={{
+									fontWeight: 'bold',
+									color: 'gray',
+								}}
+							>
+								In case the loan term has expired but the borrower has not repaid it, you can foreclose the loan and
+								claim the collateral NFT.
 							</ListItemText>
 						</ListItem>
 					</List>
