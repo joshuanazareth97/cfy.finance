@@ -108,10 +108,11 @@ const DefaultLayout = ({ children }: Props) => {
 						<Button
 							component={RouterLink}
 							to="/lend"
+							variant="contained"
 							sx={{
 								display: 'flex',
 								textDecoration: 'none',
-								marginRight: '0.5rem',
+								marginRight: '1.5rem',
 							}}
 						>
 							Lend
@@ -119,10 +120,12 @@ const DefaultLayout = ({ children }: Props) => {
 						<Button
 							component={RouterLink}
 							to="/borrow"
+							variant="contained"
+							color="secondary"
 							sx={{
 								display: 'flex',
 								textDecoration: 'none',
-								marginRight: '0.5rem',
+								marginRight: '1.5rem',
 							}}
 						>
 							Borrow
