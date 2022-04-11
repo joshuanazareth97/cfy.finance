@@ -50,7 +50,7 @@ const Homepage = (props: unknown) => {
 						marginBottom: '2rem',
 					}}
 				>
-					Access liquidity, using any HRC721 NFT without giving up ownership.
+					Access liquidity using any HRC721 NFT without giving up ownership.
 				</Typography>
 				<Button
 					component="a"

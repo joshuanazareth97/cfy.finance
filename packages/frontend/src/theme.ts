@@ -38,6 +38,7 @@ theme.components = {
 		styleOverrides: {
 			root: {
 				fontWeight: 'bold',
+				borderRadius: '2px',
 			},
 		},
 	},
