@@ -40,7 +40,7 @@ const Homepage = (props: unknown) => {
 						marginBottom: '2rem',
 					}}
 				>
-					Instant, hassle-free loans
+					Hassle free, NFT - collateralized loans
 				</Typography>
 				<Typography
 					color="black"
@@ -50,7 +50,7 @@ const Homepage = (props: unknown) => {
 						marginBottom: '2rem',
 					}}
 				>
-					Access liquidity without giving up NFT ownership.
+					Access liquidity, using any HRC721 NFT without giving up ownership.
 				</Typography>
 				<Button
 					component="a"
