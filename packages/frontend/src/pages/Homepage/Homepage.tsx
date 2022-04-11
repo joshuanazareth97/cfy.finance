@@ -53,6 +53,9 @@ const Homepage = (props: unknown) => {
 					Access liquidity without giving up NFT ownership.
 				</Typography>
 				<Button
+					component="a"
+					href="https://github.com/FoundationCryptoLabs/CFY/blob/main/README.md"
+					target="_blank"
 					sx={{
 						marginBottom: '4rem',
 					}}
