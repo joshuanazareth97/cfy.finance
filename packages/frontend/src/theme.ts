@@ -15,7 +15,7 @@ declare module '@mui/material/styles' {
 	}
 }
 
-export const theme = createTheme({
+const theme = createTheme({
 	palette: {
 		white: '#FFF5EE',
 		black: '#4a4a4a',
@@ -26,34 +26,38 @@ export const theme = createTheme({
 			light: '#4C956C',
 		},
 		text: {
-			primary: '#2a2a2a',
+			primary: '#4a4a4a',
 		},
 		warning: { main: '#902D41' },
 	},
-	components: {
-		MuiButton: {
-			styleOverrides: {
-				root: {
-					fontWeight: 'bold',
-				},
-			},
-		},
-		MuiDialogTitle: {
-			styleOverrides: {
-				root: {
-					display: 'flex',
-					fontWeight: 'bold',
-					justifyContent: 'center',
-				},
-			},
-		},
-		MuiDialogActions: {
-			styleOverrides: {
-				root: {
-					padding: '1.5rem',
-					justifyContent: 'center',
-				},
+});
+
+theme.components = {
+	...theme.components,
+	MuiButton: {
+		styleOverrides: {
+			root: {
+				fontWeight: 'bold',
 			},
 		},
 	},
-});
+	MuiDialogTitle: {
+		styleOverrides: {
+			root: {
+				display: 'flex',
+				fontWeight: 'bold',
+				justifyContent: 'center',
+			},
+		},
+	},
+	MuiDialogActions: {
+		styleOverrides: {
+			root: {
+				padding: '1.5rem',
+				justifyContent: 'center',
+			},
+		},
+	},
+};
+
+export { theme };

@@ -99,7 +99,7 @@ const DefaultLayout = ({ children }: Props) => {
 									marginRight: '0.5rem',
 								}}
 							/>
-							<Typography fontSize="0.875rem" fontWeight="bold">
+							<Typography fontSize="0.875rem" fontWeight="bold" color="black">
 								{balance?.slice(0, 7)}
 							</Typography>
 						</Box>
