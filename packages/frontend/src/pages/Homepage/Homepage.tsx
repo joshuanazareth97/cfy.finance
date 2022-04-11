@@ -24,7 +24,7 @@ const Homepage = (props: unknown) => {
 			<Box
 				display="flex"
 				flexDirection="column"
-				alignItems="stretch"
+				alignItems="center"
 				alignSelf="center"
 				justifyContent="center"
 				sx={{
@@ -37,22 +37,29 @@ const Homepage = (props: unknown) => {
 					color="primary"
 					variant="h2"
 					sx={{
-						marginBottom: '1rem',
+						marginBottom: '2rem',
 					}}
 				>
 					Instant, hassle-free loans
 				</Typography>
 				<Typography
-					textAlign="center"
 					color="black"
 					fontWeight="bold"
 					variant="h6"
 					sx={{
-						marginBottom: '1rem',
+						marginBottom: '2rem',
 					}}
 				>
 					Access liquidity without giving up NFT ownership.
 				</Typography>
+				<Button
+					sx={{
+						marginBottom: '4rem',
+					}}
+					variant="contained"
+				>
+					Read the documentation
+				</Button>
 			</Box>
 
 			<Box

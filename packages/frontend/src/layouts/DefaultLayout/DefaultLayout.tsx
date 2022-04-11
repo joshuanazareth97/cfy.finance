@@ -89,22 +89,22 @@ const DefaultLayout = ({ children }: Props) => {
 						}}
 					>
 						<img src={logoImg} />
-						CFY
 					</Typography>
-					{account && (
-						<Box display="flex" alignItems="center">
-							<MdAccountBalanceWallet
-								size="1.25rem"
-								style={{
-									marginRight: '0.5rem',
-								}}
-							/>
-							<Typography fontSize="0.875rem" fontWeight="bold" color="black">
-								{balance?.slice(0, 7)}
-							</Typography>
-						</Box>
-					)}
+
 					<Box display="flex">
+						{account && (
+							<Box display="flex" alignItems="center" marginRight="2.5rem">
+								<MdAccountBalanceWallet
+									size="1.25rem"
+									style={{
+										marginRight: '0.5rem',
+									}}
+								/>
+								<Typography fontSize="0.875rem" fontWeight="bold" color="black">
+									{balance?.slice(0, 7)} <small>ONE</small>
+								</Typography>
+							</Box>
+						)}
 						<Button
 							component={RouterLink}
 							to="/lend"
