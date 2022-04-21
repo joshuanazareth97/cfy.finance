@@ -101,7 +101,7 @@ const DefaultLayout = ({ children }: Props) => {
 									}}
 								/>
 								<Typography fontSize="0.875rem" fontWeight="bold" color="black">
-									{balance?.slice(0, 7)} <small>ONE</small>
+									{balance?.slice(0, 7) || (0).toFixed(2)} <small>ONE</small>
 								</Typography>
 							</Box>
 						)}

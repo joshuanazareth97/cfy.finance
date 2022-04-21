@@ -26,6 +26,7 @@
     "frontend:format": "yarn workspace @cfy/frontend format",
     "frontend:lint": "yarn workspace @cfy/frontend lint",
     "frontend:test": "yarn workspace @cfy/frontend test",
+    "frontend:mainnet": "yarn workspace @cfy/frontend start:mainnet",
     "compile": "yarn workspace @cfy/hardhat compile",
     "format": "yarn hardhat:format && yarn frontend:format",
     "fund": "yarn workspace @cfy/hardhat hardhat fund",

@@ -5,6 +5,7 @@ import { Harmony } from '@harmony-js/core';
 type Library = Web3Provider | Harmony;
 
 const envProvider: string = process.env.REACT_APP_FRONTEND_NETWORK || 'testnet';
+console.log(envProvider);
 
 const configProviders: { [name: string]: any } = {
 	localnet: {
@@ -22,7 +23,7 @@ const configProviders: { [name: string]: any } = {
 	mainnet: {
 		chainId: ChainID.HmyMainnet,
 		chainType: ChainType.Harmony,
-		url: 'https://api.s0.t.hmny.io',
+		url: 'https://api.harmony.one',
 		networkId: '1666600000',
 	},
 };

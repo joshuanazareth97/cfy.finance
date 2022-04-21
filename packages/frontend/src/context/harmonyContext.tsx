@@ -19,6 +19,7 @@ interface HamonyProviderContext {
 }
 
 const provider = getProvider();
+console.log(provider);
 const hmy = new Harmony(provider.url, { chainId: provider.chainId, chainType: provider.chainType });
 
 const HarmonyContext = createContext<HamonyProviderContext | undefined>(undefined);
