@@ -78,6 +78,12 @@ const DefaultLayout = ({ children }: Props) => {
 		}
 	}, [account]);
 
+	useEffect(() => {
+		if (account) {
+			fetchBalance(account);
+		}
+	}, [account]);
+
 	return (
 		<>
 			<AppBar color="transparent" position="static">
