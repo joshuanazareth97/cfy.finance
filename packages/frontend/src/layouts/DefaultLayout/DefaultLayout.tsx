@@ -28,7 +28,7 @@ type Props = {
 };
 
 const DefaultLayout = ({ children }: Props) => {
-	const { hmy, setLoggedIn, loggedIn, balance } = useHarmony();
+	const { hmy, setLoggedIn, loggedIn, balance, fetchBalance } = useHarmony();
 	const { account, deactivate, activate } = useWeb3React();
 
 	const [infoOpen, setInfoOpen] = useState(false);
@@ -59,7 +59,13 @@ const DefaultLayout = ({ children }: Props) => {
 		if (loggedIn) {
 			activate(connectorsByName[ConnectorNames.Metamask]);
 		}
-	}, [loggedIn, activate]);
+	}, [loggedIn, activate, account]);
+
+	useEffect(() => {
+		if (account) {
+			fetchBalance(account);
+		}
+	}, [account]);
 
 	return (
 		<>

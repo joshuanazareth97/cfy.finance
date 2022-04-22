@@ -1,6 +1,6 @@
 {
-  "name": "testnet",
-  "chainId": "1666700000",
+  "name": "mainnet",
+  "chainId": "1666600000",
   "contracts": {
     "NFT": {
       "abi": [
@@ -534,7 +534,7 @@
       ]
     },
     "LoansNFT": {
-      "address": "0x0552b28448041F533fF4a739228bE829ae206c9E",
+      "address": "0xe2D9c05C443AABeE658c0565001D0003Ca17BC91",
       "abi": [
         {
           "inputs": [],

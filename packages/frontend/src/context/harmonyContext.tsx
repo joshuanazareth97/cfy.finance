@@ -19,7 +19,6 @@ interface HamonyProviderContext {
 }
 
 const provider = getProvider();
-console.log(provider);
 const hmy = new Harmony(provider.url, { chainId: provider.chainId, chainType: provider.chainType });
 
 const HarmonyContext = createContext<HamonyProviderContext | undefined>(undefined);
@@ -66,6 +65,7 @@ const useBalance = () => {
 		async (account: string) => {
 			const address = isBech32Address(account) ? account : toBech32(account);
 			const balance = await hmy.blockchain.getBalance({ address });
+			console.log(balance);
 			const parsedBalance = fromWei(hexToNumber(balance.result), Units.one);
 			setBalance(parsedBalance);
 		},
