@@ -19,9 +19,10 @@ import { useHarmony } from 'context/harmonyContext';
 import React, { useCallback, useEffect, useState } from 'react';
 import { MdAccountBalanceWallet, MdOutlineAccountCircle } from 'react-icons/md';
 import { Link as RouterLink, Outlet } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { truncateString } from 'utils';
 import { ConnectorNames, connectorsByName } from 'utils/connectors';
+import { getProvider } from 'utils/provider';
 
 type Props = {
 	children?: React.ReactNode;
@@ -29,7 +30,7 @@ type Props = {
 
 const DefaultLayout = ({ children }: Props) => {
 	const { hmy, setLoggedIn, loggedIn, balance } = useHarmony();
-	const { account, deactivate, activate } = useWeb3React();
+	const { account, deactivate, activate, chainId, connector } = useWeb3React();
 
 	const [infoOpen, setInfoOpen] = useState(false);
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -50,6 +51,16 @@ const DefaultLayout = ({ children }: Props) => {
 		deactivate();
 		setLoggedIn(false);
 	}, [deactivate]);
+
+	// CHAIN ID CHECK
+	useEffect(() => {
+		if (chainId && `${chainId}` !== getProvider().networkId) {
+			toast.error(
+				`Please make sure that you're connected to the Harmony ${process.env.REACT_APP_FRONTEND_NETWORK || 'Testnet'}`,
+			);
+			logout();
+		}
+	}, [chainId, logout]);
 
 	const handleClose = () => {
 		setAnchorEl(null);

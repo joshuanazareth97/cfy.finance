@@ -7,7 +7,6 @@ export const getListFromFunction = async (func: any, limit: number) => {
 	const final: any = [];
 	for (let i = 0; i < limit; i++) {
 		const res = await func(i)();
-		console.log('here', res);
 		final.push();
 	}
 	return final;
@@ -73,6 +72,7 @@ export const getUserNFTsFromContract = async (nftContract: any, userAddress: str
 };
 
 export const getAllLoansFromContract = async (contract: any) => {
+	console.dir(contract);
 	const numTokens = await contract.methods.totalLoanRequests().call();
 	const tokens: ILoanRequest[] = [];
 	for (let id = numTokens - 1; id >= 0; id--) {
